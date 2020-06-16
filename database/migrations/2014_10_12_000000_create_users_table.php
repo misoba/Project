@@ -11,29 +11,29 @@ class CreateUsersTable extends Migration
      *
      * @return void
      */
-     public function up()
-     {
-         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->boolean('is_admin')->nullable();
-             $table->string('name');
-             $table->string('email')->unique();
-             $table->timestamp('email_verified_at')->nullable();
-             $table->string('password');
-             $table->string('phone')->nullable();
-             $table->timestamp('mobile_verified_at')->nullable();
-             $table->string('full_name')->nullable();
-             $table->string('avatar')->nullable();
-             $table->string('nic_no')->unique()->nullable();
-             $table->date('date_of_birth')->nullable();
-             $table->string('job')->nullable();
-             $table->string('address')->nullable();
-             $table->timestamp('approved_at')->nullable();
-             $table->rememberToken();
-             $table->timestamps();
-         });
-
+    public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+          $table->bigIncrements('id');
+          $table->boolean('is_admin')->nullable();
+          $table->string('user_name')->unique();
+          $table->string('full_name');
+          $table->string('dob')->nullable();
+          $table->string('nic_number')->unique();
+          $table->string('image_copy');
+          $table->string('job');
+          $table->string('avatar');
+          $table->string('email')->unique();
+          $table->timestamp('email_verified_at')->nullable();
+          $table->string('phone');
+          $table->string('mobile')->unique();
+          $table->timestamp('mobile_verified_at')->nullable();
+          $table->string('password');
+          $table->rememberToken();
+          $table->timestamps();
+        });
     }
+     
     /**
      * Reverse the migrations.
      *

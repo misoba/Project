@@ -50,14 +50,16 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['required','numeric','unique:users'],
-            'address' => ['required', 'string', 'max:255'],
-            'date_of_birth' => ['required','date','before:today'],
-            'nic'=>['required','regex:|^[0-9]{9}[Vv]$|'],
-            'job' => ['required', 'string', 'max:255'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+          'user_name' => ['required', 'string', 'max:255', 'unique:users'],
+          'full_name' => ['required', 'string', 'max:255'],
+          'nic_number' => ['required', 'string', 'max:255', 'unique:users'],
+          'image_copy' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+          'job' => ['required', 'string', 'max:255'],
+          'phone' => ['required', 'string', 'max:255'],
+          'mobile' => ['required', 'string', 'max:255'],
+          'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+          'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+          'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
@@ -69,15 +71,34 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $request = request();
+
+        $avatar = $request->file('avatar');
+        $avatarSaveAsName = time() . Auth::id() . "-avatar." . $avatar->getClientOriginalExtension();
+
+        $avatar_upload_path = 'avatar/';
+        $avatar_url = $avatar_upload_path . $avatarSaveAsName;
+        $success = $avatar->move($avatar_upload_path, $avatarSaveAsName);
+
+        $image_copy = $request->file('image_copy');
+        $image_copySaveAsName = time() . Auth::id() . "-image_copy." . $image_copy->getClientOriginalExtension();
+
+        $image_upload_path = 'image/';
+        $image_url = $image_upload_path . $image_copySaveAsName;
+        $success = $image_copy->move($image_upload_path, $image_copySaveAsName);
+
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'address' => $data['address'],
-            'date_of_birth'=>$data['date_of_birth'],
-            'nic_no'=>$data['nic'],
-            'job' => $data['job'],
-            'password' => Hash::make($data['password']),
+          'user_name' => $data['user_name'],
+          'full_name' => $data['full_name'],
+          'nic_number' => $data['nic_number'],
+          'job' => $data['job'],
+          'phone' => $data['phone'],
+          'mobile' => $data['mobile'],
+          'email' => $data['email'],
+          'password' => bcrypt($data['password']),
+          'dob' => $data['dob'],
+          'avatar' => $avatar_url,
+          'image_copy' => $image_url,
         ]);
     }
 }

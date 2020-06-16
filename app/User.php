@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 
 class User extends Authenticatable
@@ -18,9 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
-        'avatar','phone','mobile','full_name','date_of_birth',
-        'job','address',
+        'user_name', 'full_name', 'dob', 'nic_number', 'image_copy', 'job', 'avatar', 'email', 'phone', 'mobile', 'password',
     ];
 
     /**
@@ -43,8 +42,5 @@ class User extends Authenticatable
         'approved_at'=>'datetime',
     ];
 
-    public function document()
-     {
-         return $this->hasOne(document::class);
-     }
+    
 }
