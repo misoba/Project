@@ -45,7 +45,7 @@
                             <label for="dob" class="col-md-4 col-form-label text-md-right">{{ __('Date of Birth') }}</label>
 
                             <div class="col-md-6">
-                                <input id="dob" type="text" class="form-control @error('dob') is-invalid @enderror" name="dob" placeholder="date of birth" value="{{ old('dob') }}" required autocomplete="full_name" autofocus>
+                            <input id="dob" type="text" class="form-control @error('dob') is-invalid @enderror" name="dob" value="{{ old('dob') }}"   required autocomplete='dob'placeholder="Date of Birth"  onfocus="(this.type='date')" onblur="if(this.value)this.type='text' " autofocus>
 
                                 @error('dob')
                                     <span class="invalid-feedback" role="alert">

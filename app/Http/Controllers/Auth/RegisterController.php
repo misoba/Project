@@ -52,9 +52,10 @@ class RegisterController extends Controller
         return Validator::make($data, [
           'user_name' => ['required', 'string', 'max:255', 'unique:users'],
           'full_name' => ['required', 'string', 'max:255'],
-          'nic_number' => ['required', 'string', 'max:255', 'unique:users'],
+          'nic_number'=>['required','regex:|^[0-9]{9}[Vv]$|', 'unique:users'],
           'image_copy' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
           'job' => ['required', 'string', 'max:255'],
+          'dob' => ['required','date','before:today'],
           'phone' => ['required', 'string', 'max:255'],
           'mobile' => ['required', 'string', 'max:255'],
           'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
@@ -74,14 +75,14 @@ class RegisterController extends Controller
         $request = request();
 
         $avatar = $request->file('avatar');
-        $avatarSaveAsName = time() . Auth::id() . "-avatar." . $avatar->getClientOriginalExtension();
+        $avatarSaveAsName = time() . "-avatar." . $avatar->getClientOriginalExtension();
 
         $avatar_upload_path = 'avatar/';
         $avatar_url = $avatar_upload_path . $avatarSaveAsName;
         $success = $avatar->move($avatar_upload_path, $avatarSaveAsName);
 
         $image_copy = $request->file('image_copy');
-        $image_copySaveAsName = time() . Auth::id() . "-image_copy." . $image_copy->getClientOriginalExtension();
+        $image_copySaveAsName = time() . "-image_copy." . $image_copy->getClientOriginalExtension();
 
         $image_upload_path = 'image/';
         $image_url = $image_upload_path . $image_copySaveAsName;
@@ -99,6 +100,7 @@ class RegisterController extends Controller
           'dob' => $data['dob'],
           'avatar' => $avatar_url,
           'image_copy' => $image_url,
+          "status" => 'false',
         ]);
     }
 }
